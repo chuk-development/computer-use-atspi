@@ -152,10 +152,10 @@ training a model harder on screenshots does not change that economics.
 
 Give a model a shell plus the right MCPs and it handles nearly everything without a
 screen to look at. Computer-use only earns its place for the narrow set of GUI-only
-apps that expose no API, no scripting and no accessibility tree — and even there,
-the accessibility tree (this repo's point) beats pixel-guessing whenever it exists.
-Build the router, use the cheap exact paths first, and treat clicking pixels as the
-last resort it is.
+apps that expose no API and no scripting. Even then, use the accessibility tree
+(this repo's point) when one exists, and fall back to pixel-guessing only when it
+does not. Build the router, use the cheap exact paths first, and treat clicking
+pixels as the last resort it is.
 
 ## References
 
