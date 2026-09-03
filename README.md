@@ -96,12 +96,15 @@ Pixel grounding is the fallback, not the default.
 
 Real runs, all driven by GLM-5.3-Flash:
 
-- **Calculator** — clears, then clicks `4 7 × 8 9 =` on exact AT-SPI coordinates
-  and reads the display value from the tree. Fixes the pixel-guessing miss.
-  ![calculator](screenshots/verify.png)
-- **Excalidraw** — the canvas case: no useful tree, so it uses keyboard shortcuts
-  (`r` rectangle, `a` arrow, `t` text) plus the `drag` tool to actually draw a
-  diagram of how the internet works.
+- **Calculator** — clicks `4 7 × 8 9 =` on exact AT-SPI coordinates (fixing the
+  pixel-guess that hit "8" instead of "7") and reads the display value straight
+  from the accessibility tree — see the tree snippet above.
+- **Excalidraw** — the canvas case, and a deliberate failure demo. With no useful
+  a11y tree, the agent falls back to keyboard shortcuts (`r`, `a`, `t`) plus the
+  `drag` tool and slowly draws boxes by hand. It managed two labelled boxes and a
+  connector before drifting off — and this is the *wrong* approach regardless:
+  Excalidraw has a scene JSON you would simply import. It is here to show the
+  inefficient path, not to praise it.
   ![excalidraw](screenshots/excalidraw.png)
 - **Browser** — opens Chromium, navigates to a site, dismisses the cookie dialog,
   reads the headlines.
@@ -130,6 +133,29 @@ This proves the accessibility-first idea. In production you would not GUI-naviga
 a browser at all — you would drive it via Playwright/CDP and reserve the AT-SPI /
 screenshot layer for native desktop apps. Pixel/screenshot GUI navigation is the
 narrow fallback for apps that expose nothing else.
+
+## Conclusion: computer-use is a fallback, not a default
+
+The honest takeaway from building this: pixel/GUI computer-use is almost never the
+right tool, on any OS. Roughly 99% of real tasks are done better by:
+
+- the **command line** (files, builds, data, system) — one `bash` call, no pixels,
+- **app APIs / MCP servers** (GitHub, Stripe, databases, Blender's Python API,
+  Excalidraw's scene JSON) — structured and exact,
+- **the browser via Playwright/CDP** — DOM refs, not screenshots.
+
+This is not a Linux limitation. macOS (AX API) and Windows (UI Automation) expose
+the same kind of accessibility tree, and the same holds there: reading structure
+beats guessing pixels, and doing the task through a shell or API beats touching the
+screen at all. "Look at the screen and click" is inefficient on every platform;
+training a model harder on screenshots does not change that economics.
+
+Give a model a shell plus the right MCPs and it handles nearly everything without a
+screen to look at. Computer-use only earns its place for the narrow set of GUI-only
+apps that expose no API, no scripting and no accessibility tree — and even there,
+the accessibility tree (this repo's point) beats pixel-guessing whenever it exists.
+Build the router, use the cheap exact paths first, and treat clicking pixels as the
+last resort it is.
 
 ## References
 
