@@ -1,0 +1,16 @@
+# secrets
+.env
+.env.live
+
+# python
+__pycache__/
+*.pyc
+
+# runtime logs / scratch
+run*.log
+webui.log
+dashboard.log
+webui.pid
+*.xwd
+run_events.jsonl
+rocket_build.py
